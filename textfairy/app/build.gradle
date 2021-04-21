@@ -1,0 +1,239 @@
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'checkstyle'
+apply plugin: 'kotlin-kapt'
+
+def versions = ['appcompat_v7' : '27.1.1',
+                'butterknife'  : '10.2.3',
+                'leak_canary'  : '1.5',
+                'card_view'    : '27.1.1',
+                'glide'        : '4.8.0',
+                'design'       : '27.1.1',
+                'lifecycle'    : '1.1.1',
+                'photoview'    : '1.2.4',
+                'play_services': '16.0.3',
+                'relinker'     : '1.4.1']
+
+
+task checkstyle(type: Checkstyle) {
+    configFile file("${project.rootDir}/checkstyle/checkstyle.xml")
+    configProperties.checkstyleSuppressionsPath = file("${project.rootDir}/config/quality/checkstyle/suppressions.xml").absolutePath
+    source 'src'
+    include '**/*.java'
+    exclude '**/gen/**'
+    classpath = files()
+}
+
+
+android {
+    ndkVersion "21.3.6528147"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.2"
+
+    kotlinOptions { jvmTarget = "1.8" }
+    buildFeatures {viewBinding true}
+    lintOptions {disable 'MissingTranslation'}
+
+    dexOptions {
+        // Skip pre-dexing when running on Travis CI or when disabled via -Dpre-dex=false.
+        preDexLibraries = preDexEnabled && !travisBuild
+    }
+
+    defaultConfig {
+        applicationId "com.renard.ocr"
+        minSdkVersion 17
+        targetSdkVersion 30
+        versionCode 82
+        versionName = "4.1.0"
+        vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    signingConfigs {
+        release
+    }
+    buildTypes {
+        debug {
+            debuggable true
+        }
+        release {
+            // Enables code shrinking, obfuscation, and optimization for only
+            // your project's release build type.
+            minifyEnabled true
+
+            // Enables resource shrinking, which is performed by the
+            // Android Gradle plugin.
+            shrinkResources true
+
+            // Includes the default ProGuard rules files that are packaged with
+            // the Android Gradle plugin. To learn more, go to the section about
+            // R8 configuration files.
+            proguardFiles getDefaultProguardFile(
+                    'proguard-android-optimize.txt'),
+                    'proguard-rules.pro'
+            
+            signingConfig signingConfigs.release
+        }
+    }
+
+    splits {
+        abi {
+            enable true
+            reset()
+            include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
+            universalApk true
+        }
+    }
+
+    // map for the version code
+    project.ext.versionCodes = ['armeabi': 1, 'armeabi-v7a': 2, 'arm64-v8a': 3, 'mips': 5, 'mips64': 6, 'x86': 6, 'x86_64': 9]
+
+    android.applicationVariants.all { variant ->
+        // assign different version code for each output
+        variant.outputs.each { output ->
+            output.versionCodeOverride =
+                    project.ext.versionCodes.get(output.getFilter(com.android.build.OutputFile.ABI), 0) * 100 + android.defaultConfig.versionCode
+        }
+    }
+    flavorDimensions "mode"
+
+    productFlavors {
+        playstore {
+            dimension "mode"
+            ext.useProprietaryLibraries = true
+
+        }
+        develop {
+            dimension "mode"
+            ext.useProprietaryLibraries = false
+        }
+    }
+
+
+    lintOptions {
+        //I'm too lazy to translate everything
+        abortOnError true
+    }
+    externalNativeBuild {
+        ndkBuild {
+            path 'Android.mk'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+Properties props = new Properties()
+def propFile = new File('signing.properties')
+if (propFile.canRead()) {
+    props.load(new FileInputStream(propFile))
+
+    if (props != null && props.containsKey('STORE_FILE') && props.containsKey('STORE_PASSWORD') &&
+            props.containsKey('KEY_ALIAS') && props.containsKey('KEY_PASSWORD')) {
+        android.signingConfigs.release.storeFile = file(props['STORE_FILE'])
+        android.signingConfigs.release.storePassword = props['STORE_PASSWORD']
+        android.signingConfigs.release.keyAlias = props['KEY_ALIAS']
+        android.signingConfigs.release.keyPassword = props['KEY_PASSWORD']
+    } else {
+        println 'signing.properties found but some entries are missing'
+        android.buildTypes.release.signingConfig = null
+    }
+} else {
+    println 'signing.properties not found'
+    android.buildTypes.release.signingConfig = null
+}
+
+
+dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'com.github.barteksc:pdfium-android:1.5.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
+    implementation "androidx.core:core-ktx:1.3.2"
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation "androidx.activity:activity-ktx:1.1.0"
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:${versions.leak_canary}"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:${versions.leak_canary}"
+    implementation 'com.viewpagerindicator:library:2.4.1@aar'
+    implementation "com.commit451:PhotoView:${versions.photoview}"
+    implementation 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation 'de.greenrobot:eventbus:2.4.0'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'org.apache.commons:commons-compress:1.12'
+    implementation 'androidx.cardview:cardview:1.0.0'
+    implementation "com.jakewharton:butterknife:${versions.butterknife}"
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
+    implementation 'androidx.test.espresso.idling:idling-concurrent:3.3.0'
+    implementation "com.github.bumptech.glide:glide:${versions.glide}"
+    implementation "androidx.work:work-runtime-ktx:2.4.0"
+
+    playstoreImplementation platform('com.google.firebase:firebase-bom:25.12.0')
+    playstoreImplementation 'com.google.firebase:firebase-analytics-ktx'
+    playstoreImplementation 'com.google.firebase:firebase-crashlytics:17.2.2'
+    playstoreImplementation 'com.google.firebase:firebase-analytics-ktx:18.0.0'
+    playstoreImplementation 'com.google.firebase:firebase-crashlytics-ndk:17.2.2'
+    playstoreImplementation "com.android.billingclient:billing-ktx:3.0.1"
+    implementation "androidx.room:room-runtime:2.2.5"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-common-java8:2.2.0'
+    implementation "com.getkeepsafe.relinker:relinker:${versions.relinker}"
+
+    kapt "com.github.bumptech.glide:compiler:${versions.glide}"
+    kapt "com.jakewharton:butterknife-compiler:${versions.butterknife}"
+    kapt "androidx.room:room-compiler:2.2.5"
+
+    // Core library
+    androidTestImplementation 'androidx.test:core:1.3.0'
+
+    // AndroidJUnitRunner and JUnit Rules
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test:rules:1.3.0'
+
+    // Assertions
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.ext:truth:1.3.0'
+    androidTestImplementation 'com.google.truth:truth:1.0'
+
+    // Espresso dependencies
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-intents:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-accessibility:3.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-web:3.3.0'
+    androidTestImplementation 'androidx.test.espresso.idling:idling-concurrent:3.3.0'
+
+    androidTestImplementation 'com.google.dexmaker:dexmaker-mockito:1.2'
+    androidTestImplementation 'com.google.dexmaker:dexmaker:1.2'
+    androidTestImplementation 'org.mockito:mockito-core:3.3.3'
+    androidTestImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13'
+    testImplementation 'org.mockito:mockito-all:1.10.19'
+    testImplementation('org.robolectric:robolectric:3.0-rc2') {
+        exclude group: 'commons-logging', module: 'commons-logging'
+    }
+
+}
+afterEvaluate {
+    android.applicationVariants.all { variant ->
+        variant.resValue 'string', 'application_id', variant.applicationId
+    }
+}
+android.productFlavors.each { flavor ->
+    if (getGradle().getStartParameter().getTaskRequests().toString().toLowerCase().contains(flavor.name) && flavor.ext.useProprietaryLibraries) {
+        apply plugin: 'com.google.gms.google-services'
+        apply plugin: 'com.google.firebase.crashlytics'
+        firebaseCrashlytics {
+            nativeSymbolUploadEnabled true
+        }
+    }
+}

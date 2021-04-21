@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content">
+
+        <include layout="@layout/toolbar"
+                 android:id="@+id/toolbar"/>
+
+
+        <include
+                layout="@layout/empty_document_grid"
+                android:layout_below="@+id/toolbar"
+                android:id="@+id/empty_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+
+        <com.renard.ocr.documents.viewing.grid.FancyGridView
+                android:background="@color/document_grid_background"
+                android:layout_below="@+id/toolbar"
+                android:id="@+id/gridview"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:choiceMode="none"
+                android:drawSelectorOnTop="false"
+                android:horizontalSpacing="@dimen/grid_spacing"
+                android:listSelector="@android:color/transparent"
+                android:scrollingCache="true"
+                android:verticalSpacing="@dimen/grid_spacing"/>
+    </RelativeLayout>
+
+    <com.google.android.material.navigation.NavigationView
+            app:itemTextColor="@color/primary"
+            android:layout_marginTop="?android:attr/actionBarSize"
+            app:menu="@menu/navigation_drawer"
+            android:id="@+id/left_drawer"
+            android:layout_width="210dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="@android:color/white"
+            app:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:itemBackground="?android:attr/selectableItemBackground"
+    />
+
+</androidx.drawerlayout.widget.DrawerLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="dark_grey">#ff333333</color>
+    <color name="document_grid_background">#ffDFDFDF</color>
+    <color name="primary">#212121</color>
+    <color name="accent">#009e8c</color>
+    <color name="toolbar_bottom_bar">#AAAAAA</color>
+
+    <color name="text_primary">#DE000000</color>
+    <color name="text_secondary">#8A000000</color>
+
+    <color name="grey2">#555555</color>
+    <color name="grey3">#777777</color>
+    <color name="grey6">#DDDDDD</color>
+	<color name="progress_color">#ff33b5e5</color>  
+	<color name="circle_indicator_background">#66000000</color>  
+	
+    <color name="start_activity_buttons_background">@android:color/transparent</color>
+
+    <color name="text_background">@color/document_grid_background</color>
+
+
+</resources>

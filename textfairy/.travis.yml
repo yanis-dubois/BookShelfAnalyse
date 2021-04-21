@@ -1,0 +1,30 @@
+language: android
+sudo: true
+
+os:
+  - linux
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - tools
+    - extra-android-support
+    - extra-android-m2repository
+    - extra-google-m2repository
+    - build-tools-29.0.3
+    - android-29
+licenses:
+    - android-sdk-preview-license-.+
+    - android-sdk-license-.+
+    - google-gdk-license-.+
+install:
+  - echo y | sdkmanager "ndk-bundle"
+
+script:
+  - ./gradlew assembleDevelopDebug
+
+after_failure: "cat $TRAVIS_BUILD_DIR/app/build/outputs/lint-results-debug.xml"
+
+
+
