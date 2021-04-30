@@ -1,0 +1,8 @@
+Set the environnement to On :
+$ source env/bin/activate
+
+Launch a notebook :
+$ jupyter notebook _name_.ipynb
+
+Set the environnement to Off :
+$ deactivate
