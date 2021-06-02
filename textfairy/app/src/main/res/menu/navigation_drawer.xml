@@ -24,5 +24,9 @@
                 android:id="@+id/about"
                 android:icon="@drawable/ic_action_about"
                 android:title="@string/about"/>
+        <item
+            android:id="@+id/accessibility"
+            android:icon="@drawable/ic_action_about"
+            android:title="@string/accessibility"/>
     </group>
 </menu>

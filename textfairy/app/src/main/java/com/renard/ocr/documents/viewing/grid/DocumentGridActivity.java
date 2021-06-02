@@ -57,6 +57,7 @@ import com.renard.ocr.documents.creation.PixLoadStatus;
 import com.renard.ocr.documents.viewing.DocumentContentProvider;
 import com.renard.ocr.documents.viewing.single.DocumentActivity;
 import com.renard.ocr.main_menu.AboutActivity;
+import com.renard.ocr.main_menu.AccessibilityActivity;
 import com.renard.ocr.main_menu.FeedbackActivity;
 import com.renard.ocr.main_menu.ReleaseNoteDialog;
 import com.renard.ocr.main_menu.TipsActivity;
@@ -248,7 +249,10 @@ public class DocumentGridActivity extends NewDocumentActivity implements Documen
                         startActivity(new Intent(DocumentGridActivity.this, AboutActivity.class));
                         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                         break;
-
+                    case R.id.accessibility:
+                        startActivity(new Intent(DocumentGridActivity.this, AccessibilityActivity.class));
+                        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        break;
                 }
                 return true;
             }
