@@ -2,10 +2,13 @@ package com.renard.ocr.main_menu;
 
 import com.renard.ocr.MonitoredActivity;
 import com.renard.ocr.R;
+import com.renard.ocr.util.FontChangeCrawler;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.core.app.NavUtils;
 
@@ -20,6 +23,7 @@ public class AccessibilityActivity extends MonitoredActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accessibility);
+        applyFont();
         initToolbar();
         setToolbarMessage(R.string.accessibility);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -51,6 +55,6 @@ public class AccessibilityActivity extends MonitoredActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-
+        Log.d("tagtag", "message");
     }
 }

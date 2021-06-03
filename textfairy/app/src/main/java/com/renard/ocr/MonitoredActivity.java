@@ -25,6 +25,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.ImageView;
@@ -37,6 +38,7 @@ import androidx.appcompat.widget.Toolbar;
 import com.renard.ocr.analytics.Analytics;
 import com.renard.ocr.analytics.CrashLogger;
 import com.renard.ocr.documents.creation.crop.BaseActivityInterface;
+import com.renard.ocr.util.FontChangeCrawler;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -284,5 +286,12 @@ public abstract class MonitoredActivity extends AppCompatActivity implements Bas
     @Override
     public void setDialogId(int dialogId) {
         mDialogId = dialogId;
+    }
+
+    public void applyFont() {
+        Log.d("applyFont", "apply font call");
+        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(),
+                "font/open_dyslexic_mono_regular.otf");
+        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
     }
 }
