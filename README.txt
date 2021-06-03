@@ -5,6 +5,10 @@
 
 Project inspired by
 
+- textFairy :
+
+https://github.com/renard314/textfairy
+https://coderwall.com/p/qxxmaa/android-use-a-custom-font-everywhere
 
 - method :
 
