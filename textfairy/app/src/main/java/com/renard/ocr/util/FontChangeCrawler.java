@@ -20,6 +20,10 @@ public class FontChangeCrawler
         typeface = Typeface.createFromAsset(assets, assetsFontFileName);
     }
 
+    public FontChangeCrawler(String filePath) {
+        typeface = Typeface.createFromFile(filePath);
+    }
+
     public void replaceFonts(ViewGroup viewTree)
     {
         View child;

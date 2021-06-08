@@ -40,6 +40,8 @@ public class BetaTestActivity extends MonitoredActivity implements View.OnClickL
         setToolbarMessage(R.string.beta_test_title);
         findViewById(R.id.textView_become_tester).setOnClickListener(this);
         findViewById(R.id.textView_join_community).setOnClickListener(this);
+
+        applyFont();
     }
 
     @Override

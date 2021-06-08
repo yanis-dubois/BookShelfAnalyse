@@ -18,6 +18,7 @@
 package com.renard.ocr;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -39,6 +40,7 @@ import com.renard.ocr.analytics.Analytics;
 import com.renard.ocr.analytics.CrashLogger;
 import com.renard.ocr.documents.creation.crop.BaseActivityInterface;
 import com.renard.ocr.util.FontChangeCrawler;
+import com.renard.ocr.util.PreferencesUtils;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -55,6 +57,8 @@ public abstract class MonitoredActivity extends AppCompatActivity implements Bas
     private TextView mToolbarMessage;
     protected Analytics mAnalytics;
     protected CrashLogger mCrashLogger;
+
+    public String filePath;
 
     public interface LifeCycleListener {
         void onActivityCreated(MonitoredActivity activity);
@@ -288,10 +292,16 @@ public abstract class MonitoredActivity extends AppCompatActivity implements Bas
         mDialogId = dialogId;
     }
 
+
     public void applyFont() {
-        Log.d("applyFont", "apply font call");
-        FontChangeCrawler fontChanger = new FontChangeCrawler(getAssets(),
-                "font/open_dyslexic_mono_regular.otf");
-        fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
+        SharedPreferences sharedPreferences = getSharedPreferences(PreferencesUtils.LAST_FONT, MODE_PRIVATE);
+        String font = sharedPreferences.getString(PreferencesUtils.FONT, "");
+
+        try {
+            FontChangeCrawler fontChanger = new FontChangeCrawler(font);
+            fontChanger.replaceFonts((ViewGroup)this.findViewById(android.R.id.content));
+        } catch (Exception e) {
+            Log.e("", "Failed to apply the font : " + font + " " + e.getMessage());
+        }
     }
 }

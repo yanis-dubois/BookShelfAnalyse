@@ -44,6 +44,9 @@ public class PreferencesUtils {
     private static final String PREFERENCES_IS_FIRST_START = "is_first_start";
     private static final String PREFERENCES_IS_FIRST_SCAN = "is_first_scan";
 
+    public static final String LAST_FONT = "last_font";
+    public static final String FONT = "font";
+
     public static void initPreferencesWithDefaultsIfEmpty(Context appContext) {
         SharedPreferences prefs = getPreferences(appContext);
         Editor edit = prefs.edit();

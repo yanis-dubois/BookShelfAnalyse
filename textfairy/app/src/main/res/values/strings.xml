@@ -280,6 +280,6 @@
     <string name="scanning_pdf_progress">Page %1$d of %2$d</string>
     <string name="scanning_multiple_title">Scanning %1$d files</string>
     <string name="accessibility">Accessibility</string>
-    <string name="accessibility_text">You can load a font by clicking here</string>
+    <string name="accessibility_text">Only (.ttf, .ttc, .otf, .xml) extension can be used</string>
     <string name="load_font">Load font</string>
 </resources>

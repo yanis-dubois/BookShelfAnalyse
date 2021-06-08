@@ -45,6 +45,8 @@ public class AboutActivity extends MonitoredActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarMessage(R.string.about);
         showVersionNumber();
+
+        applyFont();
     }
 
     private void showVersionNumber() {

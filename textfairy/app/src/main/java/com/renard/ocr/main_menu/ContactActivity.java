@@ -87,6 +87,8 @@ public class ContactActivity extends MonitoredActivity {
                 startActivity(Intent.createChooser(intent, getString(R.string.feedback_title)));
             }
         });
+
+        applyFont();
     }
 
     @Override

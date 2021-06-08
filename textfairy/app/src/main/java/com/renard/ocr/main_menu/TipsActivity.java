@@ -15,6 +15,7 @@
  */
 package com.renard.ocr.main_menu;
 
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.core.app.NavUtils;

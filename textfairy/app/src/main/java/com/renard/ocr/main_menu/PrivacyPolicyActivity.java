@@ -38,6 +38,8 @@ public class PrivacyPolicyActivity extends MonitoredActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         initWebView();
         initTrackingToggle();
+
+        applyFont();
     }
 
     private void initTrackingToggle() {

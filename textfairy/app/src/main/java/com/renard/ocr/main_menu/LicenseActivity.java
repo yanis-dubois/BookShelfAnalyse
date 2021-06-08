@@ -39,6 +39,8 @@ public class LicenseActivity extends MonitoredActivity {
         leptonica.setMovementMethod(new LinkMovementMethod());
         tesseract.setMovementMethod(new LinkMovementMethod());
         hocr2pdf.setMovementMethod(new LinkMovementMethod());
+
+        applyFont();
     }
 
     @Override
