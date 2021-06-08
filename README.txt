@@ -9,8 +9,11 @@ Project inspired by
 
 https://github.com/renard314/textfairy
 https://coderwall.com/p/qxxmaa/android-use-a-custom-font-everywhere
+http://www.throrinstudio.com/dev/android/introduction-aux-intents-et-recuperation-dun-fichier/#respond
+https://stackoverflow.com/questions/58550549/how-to-use-intent-action-open-document-in-android-pie
 
-- method :
+
+- method of bookshelf analysis:
 
 http://web.stanford.edu/~bgirod/pdfs/Tsai_ACM_Multimedia_11.pdf
 https://eeprojects.com/projects/CASE_BookSpine_082008.pdf
